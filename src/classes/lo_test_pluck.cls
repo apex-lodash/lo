@@ -1,42 +1,173 @@
 @isTest
 private class lo_test_pluck {
-	private class BazTest {
+	private class LevelThree {
 		public String testString;
 
-		public BazTest(String s) {
+		public LevelThree(String s) {
 			this.testString = s;
 		}
 	}
 
-	private class BarTest {
-		public BazTest baz;
+	private class LevelTwo {
+		public LevelThree three;
 
-		public BarTest(String s) {
-			this.baz = new BazTest('bar:' + s);
+		public LevelTwo(String s) {
+			this.three = new LevelThree('two:' + s);
 		}
 	}
 
-	private class FooTest {
+	private class LevelOne {
 		public String testString;
 		public Integer testInteger;
-		public BarTest bar;
+		public LevelTwo two;
 
-		public FooTest(String s, Integer i) {
+		public LevelOne(String s, Integer i) {
 			this.testString = s;
 			this.testInteger = i;
-			this.bar = new BarTest('foo:' + s);
+			this.two = new LevelTwo('one:' + s);
 		}
 	}
 
-	static testMethod void pluck_customObject_singleLevel_string() {
+	static testMethod void pluck_single_usingCustomObjectAndSingleLevelKey_returnsCastableString() {
 		lo.LOGGING = true;
 
-		List<FooTest> testList = new List<FooTest>{
-			new FooTest('foo0', 0),
-			new FooTest('foo1', 1),
-			new FooTest('foo2', 2),
-			new FooTest('foo3', 3),
-			new FooTest('foo4', 4)
+		LevelOne testObject = new LevelOne('foo', 100);
+
+		Test.startTest();
+
+		System.assertEquals('foo', (String)(lo.pluck(testObject, 'testString')), 'Did not get the correct result back');
+
+		Test.stopTest();
+	}
+
+	static testMethod void pluck_single_usingCustomObjectAndUnknownKey_throwsException() {
+		lo.LOGGING = true;
+		String key = 'unknownKey';
+
+		LevelOne testObject = new LevelOne('foo', 100);
+
+		Test.startTest();
+
+		try {
+			Object result = lo.pluck(testObject, key);
+			System.assert(false, 'Should have thrown an exception by now');
+		} catch (lo.UnknownKeyException e) {
+			String expectedMessage = lo.MSG_UNKNOWN_KEY + key;
+			System.assertEquals(expectedMessage, e.getMessage(), 'Got the right exception type but the wrong message');
+		}
+
+		Test.stopTest();
+	}
+
+	static testMethod void pluck_single_usingCustomObjectAndMultiLevelKey_returnsCastableString() {
+		lo.LOGGING = true;
+
+		LevelOne testObject = new LevelOne('foo', 100);
+
+		Test.startTest();
+
+		System.assertEquals('two:one:foo', (String)(lo.pluck(testObject, 'two.three.testString')), 'Did not get the correct result back');
+
+		Test.stopTest();
+	}
+
+	static testMethod void pluck_single_usingCustomObjectAndMultiLevelUnknownKey_throwsException() {
+		lo.LOGGING = true;
+		String key = 'unknownKey';
+
+		LevelOne testObject = new LevelOne('foo', 100);
+
+		Test.startTest();
+
+		try {
+			Object result = lo.pluck(testObject, 'two.three.' + key);
+			System.assert(false, 'Should have thrown an exception by now');
+		} catch (lo.UnknownKeyException e) {
+			String expectedMessage = lo.MSG_UNKNOWN_KEY + key;
+			System.assertEquals(expectedMessage, e.getMessage(), 'Got the right exception type but the wrong message');
+		}
+
+		Test.stopTest();
+	}
+
+	static testMethod void pluck_single_usingSObjectAndSingleLevelKey_returnsCastableString() {
+		String accountName = '_unittest_account_0: ' + Datetime.now().getTime();
+
+		Account testAccount = new Account(Name = accountName);
+
+		Test.startTest();
+
+		System.assertEquals(accountName, (String)(lo.pluck(testAccount, 'Name')), 'Did not get the expected result back');
+
+		Test.stopTest();
+	}
+
+	static testMethod void pluck_single_usingSObjectAndMultiLevelKey_returnsCastableString() {
+		String accountName = '_unittest_account_0: ' + Datetime.now().getTime();
+
+		Account testAccount = new Account(Name = accountName);
+		insert testAccount;
+
+		Contact testContact = new Contact(
+			AccountId = testAccount.Id,
+			LastName = '_unittest_contact_: ' + Datetime.now().getTime()
+		);
+		insert testContact;
+
+		testContact = [
+			select Account.Name
+			from Contact
+			where Id = :testContact.Id
+		];
+
+		Test.startTest();
+
+		System.assertEquals(accountName, (String)(lo.pluck(testContact, 'Account.Name')), 'Did not get the expected result back');
+
+		Test.stopTest();
+	}
+
+	static testMethod void pluck_single_usingSObjectAndUnqueriedField_throwsException() {
+		String accountName = '_unittest_account_0: ' + Datetime.now().getTime();
+		String key = 'AccountNumber';
+
+		Account testAccount = new Account(Name = accountName);
+		insert testAccount;
+
+		Contact testContact = new Contact(
+			AccountId = testAccount.Id,
+			LastName = '_unittest_contact_: ' + Datetime.now().getTime()
+		);
+		insert testContact;
+
+		testContact = [
+			select Account.Name
+			from Contact
+			where Id = :testContact.Id
+		];
+
+		Test.startTest();
+
+		try {
+			Object result = lo.pluck(testContact, 'Account.' + key);
+			System.assert(false, 'Should have thrown an exception by now');
+		} catch (lo.UnknownKeyException e) {
+			String expectedMessage = lo.MSG_UNKNOWN_KEY + key;
+			System.assertEquals(expectedMessage, e.getMessage(), 'Got the right exception type but the wrong message');
+		}
+
+		Test.stopTest();
+	}
+
+	static testMethod void pluck_list_usingCustomObjectAndSingleLevelKey_returnsListOfCastableStringList() {
+		lo.LOGGING = true;
+
+		List<LevelOne> testList = new List<LevelOne>{
+			new LevelOne('foo0', 0),
+			new LevelOne('foo1', 1),
+			new LevelOne('foo2', 2),
+			new LevelOne('foo3', 3),
+			new LevelOne('foo4', 4)
 		};
 
 		Test.startTest();
@@ -60,47 +191,15 @@ private class lo_test_pluck {
 		}
 	}
 
-	static testMethod void pluck_customObject_singleLevel_integer() {
+	static testMethod void pluck_list_usingCustomObjectAndUnknownKey_returnsEmptyList() {
 		lo.LOGGING = true;
 
-		List<FooTest> testList = new List<FooTest>{
-			new FooTest('foo0', 0),
-			new FooTest('foo1', 1),
-			new FooTest('foo2', 2),
-			new FooTest('foo3', 3),
-			new FooTest('foo4', 4)
-		};
-
-		Test.startTest();
-
-		List<Object> results = lo.pluck(testList, 'testInteger');
-
-		Test.stopTest();
-
-		List<Integer> expectedResults = new List<Integer>{
-			0,
-			1,
-			2,
-			3,
-			4
-		};
-
-		System.assertEquals(expectedResults.size(), results.size(), 'Did not get the expected number of results back');
-
-		for (Integer i = 0; i < expectedResults.size(); i++) {
-			System.assertEquals(expectedResults.get(i), (Integer)(results.get(i)), 'Did not get the correct result back in slot ' + i);
-		}
-	}
-
-	static testMethod void pluck_customObject_singleLevel_unknownKey() {
-		lo.LOGGING = true;
-
-		List<FooTest> testList = new List<FooTest>{
-			new FooTest('foo0', 0),
-			new FooTest('foo1', 1),
-			new FooTest('foo2', 2),
-			new FooTest('foo3', 3),
-			new FooTest('foo4', 4)
+		List<LevelOne> testList = new List<LevelOne>{
+			new LevelOne('foo0', 0),
+			new LevelOne('foo1', 1),
+			new LevelOne('foo2', 2),
+			new LevelOne('foo3', 3),
+			new LevelOne('foo4', 4)
 		};
 
 		Test.startTest();
@@ -112,29 +211,29 @@ private class lo_test_pluck {
 		System.assertEquals(0, results.size(), 'Did not get the expected number of results back');
 	}
 
-	static testMethod void pluck_customObject_multiLevel() {
+	static testMethod void pluck_list_usingCustomObjectAndMultiLevelKey_returnsListOfCastableStringList() {
 		lo.LOGGING = true;
 
-		List<FooTest> testList = new List<FooTest>{
-			new FooTest('foo0', 0),
-			new FooTest('foo1', 1),
-			new FooTest('foo2', 2),
-			new FooTest('foo3', 3),
-			new FooTest('foo4', 4)
+		List<LevelOne> testList = new List<LevelOne>{
+			new LevelOne('foo0', 0),
+			new LevelOne('foo1', 1),
+			new LevelOne('foo2', 2),
+			new LevelOne('foo3', 3),
+			new LevelOne('foo4', 4)
 		};
 
 		Test.startTest();
 
-		List<Object> results = lo.pluck(testList, 'bar.baz.testString');
+		List<Object> results = lo.pluck(testList, 'two.three.testString');
 
 		Test.stopTest();
 
 		List<String> expectedResults = new List<String>{
-			'bar:foo:foo0',
-			'bar:foo:foo1',
-			'bar:foo:foo2',
-			'bar:foo:foo3',
-			'bar:foo:foo4'
+			'two:one:foo0',
+			'two:one:foo1',
+			'two:one:foo2',
+			'two:one:foo3',
+			'two:one:foo4'
 		};
 
 		System.assertEquals(expectedResults.size(), results.size(), 'Did not get the expected number of results back');
@@ -144,27 +243,27 @@ private class lo_test_pluck {
 		}
 	}
 
-	static testMethod void pluck_customObject_multiLevel_unknownKey() {
+	static testMethod void pluck_list_usingCustomObjectAndMultiLevelUnknownKey_returnsEmptyList() {
 		lo.LOGGING = true;
 
-		List<FooTest> testList = new List<FooTest>{
-			new FooTest('foo0', 0),
-			new FooTest('foo1', 1),
-			new FooTest('foo2', 2),
-			new FooTest('foo3', 3),
-			new FooTest('foo4', 4)
+		List<LevelOne> testList = new List<LevelOne>{
+			new LevelOne('foo0', 0),
+			new LevelOne('foo1', 1),
+			new LevelOne('foo2', 2),
+			new LevelOne('foo3', 3),
+			new LevelOne('foo4', 4)
 		};
 
 		Test.startTest();
 
-		List<Object> results = lo.pluck(testList, 'bar.unknownKey.testString');
+		List<Object> results = lo.pluck(testList, 'two.unknownKey.testString');
 
 		Test.stopTest();
 
 		System.assertEquals(0, results.size(), 'Did not get the expected number of results back');
 	}
 
-	static testMethod void pluck_sObject_singleLevel() {
+	static testMethod void pluck_list_usingSObjectAndSingleLevelKey_returnsListOfCastableStringList() {
 		List<String> accountNames = new List<String> {
 			'_unittest_account_0: ' + Datetime.now().getTime(),
 			'_unittest_account_1: ' + Datetime.now().getTime(),
@@ -192,7 +291,7 @@ private class lo_test_pluck {
 		}
 	}
 
-	static testMethod void pluck_sObject_multiLevel() {
+	static testMethod void pluck_list_usingSObjectAndMultiLevelKey_returnsListOfCastableStringList() {
 		Integer objCount = 5;
 
 		List<String> accountNames = new List<String> {
@@ -255,7 +354,7 @@ private class lo_test_pluck {
 		}
 	}
 
-	static testMethod void pluck_sObject_multiLevel_unQueriedField() {
+	static testMethod void pluck_list_usingSObjectAndMultiLevelUnqueriedField_returnsEmptyList() {
 		Integer objCount = 5;
 
 		List<String> accountNames = new List<String> {

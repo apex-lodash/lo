@@ -1,6 +1,6 @@
 public with sharing class lo {
 	/** Exception denoting if a key is not found in a collection */
-	private class UnknownKeyException extends Exception {}
+	@testVisible private class UnknownKeyException extends Exception {}
 
 	/** Message string for if the key is not part of the collection */
 	@testVisible private static final String MSG_UNKNOWN_KEY = 'Unknown key ';
@@ -14,7 +14,7 @@ public with sharing class lo {
 	* @param e The exception to log
 	*/
 	@testVisible
-	private static void logException(Exception e) {
+	private static void log(Exception e) {
 		if (LOGGING) {
 			System.debug(System.LoggingLevel.DEBUG, e.getTypeName() + ': ' + e.getMessage());
 		}
@@ -48,6 +48,18 @@ public with sharing class lo {
 	}
 
 	/**
+	* Plucks data out of a single object
+	*
+	* @param obj The object
+	* @param path The path (dot noted) to traverse to get the information
+	*/
+	public static Object pluck(Object obj, String path) {
+		String jsonData = JSON.serialize(obj);
+		Map<String, Object> untypedCollection = (Map<String, Object>)(JSON.deserializeUntyped(jsonData));
+		return followPath(untypedCollection, path);
+	}
+
+	/**
 	* Plucks data out of a collection of objects
 	*
 	* @param collection The list of objects to pull from
@@ -59,11 +71,9 @@ public with sharing class lo {
 
 		for (Object data : collection) {
 			try {
-				String jsonData = JSON.serialize(data);
-				Map<String, Object> untypedCollection = (Map<String, Object>)(JSON.deserializeUntyped(jsonData));
-				result.add(followPath(untypedCollection, path));
+				result.add(pluck(data, path));
 			} catch (Exception e) {
-				logException(e);
+				log(e);
 			}
 		}
 
