@@ -1,0 +1,11 @@
+{
+	"name": "apex-lodash-scripts",
+	"version": "0.0.1",
+	"description": "scripts used for building apex-lodash and testing apex-lodash",
+	"dependencies": {
+		"jsforce": "*",
+		"q": "*",
+		"lodash": "*",
+		"restler": "*"
+	}
+}

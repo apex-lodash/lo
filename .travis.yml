@@ -4,5 +4,6 @@ sudo: false
 branches:
      only:
           - master
+          - coveralls
 before_script: ./build/scripts/setup_credentials.sh
 script: ./build/scripts/deploy.sh
