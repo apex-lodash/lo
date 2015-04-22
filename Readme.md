@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/apex-lodash/lo.svg?branch=master)](https://travis-ci.org/apex-lodash/lo)
+
 #apex-lodash
 This class provides some similar utility methods to that of [lodash](https://lodash.com/).
 
