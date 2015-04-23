@@ -1,5 +1,7 @@
 #!/bin/bash
 
+printenv
+
 SOL_PROPFILE="$HOME/solenopsis.properties"
 SOL_HOMEDIR="$HOME/.solenopsis"
 SOL_CREDDIR="$SOL_HOMEDIR/credentials"

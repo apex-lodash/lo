@@ -54,11 +54,13 @@ var buildClassIdToClassDataMap = function () {
 			console.log('Got information about ' + lo.size(data) + ' classes');
 
 			lo.forEach(data, function (row) {
-				id_to_class_map[row.Id] = {
-					name: path_template(row),
-					source: row.Body,
-					coverage: []
-				};
+				if (!row.Body.contains('@isTest')) {
+					id_to_class_map[row.Id] = {
+						name: path_template(row),
+						source: row.Body,
+						coverage: []
+					};
+				}
 			});
 
 			deferred.resolve();
@@ -106,6 +108,12 @@ var buildCoverallsCoverage = function () {
 							id_to_class_map[class_id].coverage[line_number] += 1;
 						}
 					});
+
+					lo.forEach(row.Coverage.uncoveredLines, function (line_number) {
+						if (id_to_class_map[class_id].coverage[line_number] === null) {
+							id_to_class_map[class_id].coverage[line_number] = 0;
+						}
+					});
 				}
 			});
 
@@ -125,12 +133,15 @@ var postToCoveralls = function () {
 	var fs_stats, post_options,
 		deferred = Q.defer(),
 		coveralls_data = {
-			service_job_id: process.env.COVERALLS_JOB_ID,
-			service_name: process.env.COVERALLS_SERVICE_NAME,
+			repo_token: process.env.COVERALLS_REPO_TOKEN,
+			service_name: 'coveralls-sfdc',
 			source_files: lo.values(id_to_class_map)
 		};
 
 	console.log('Posting data to coveralls');
+
+	console.log(process.env.COVERALLS_JOB_ID);
+	console.log(process.env.COVERALLS_SERVICE_NAME);
 
 	fs.writeFile('/tmp/coveralls_data.json', JSON.stringify(coveralls_data), function (fs_error) {
 		if (fs_error) {

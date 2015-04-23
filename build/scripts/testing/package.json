@@ -1,6 +1,10 @@
 {
 	"name": "apex-lodash-scripts",
 	"version": "0.0.1",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/apex-lodash/lo.git"
+	},
 	"description": "scripts used for building apex-lodash and testing apex-lodash",
 	"dependencies": {
 		"jsforce": "*",
