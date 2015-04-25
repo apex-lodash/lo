@@ -11,8 +11,10 @@ TODO: Add installation guide
 Used to pluck a list of fields out of a list of objects
 
 ###Single object
+```java
 Account account = ...;
 Object lo.pluck(account, 'name');
+```
 
 ###Single depth
 ```java
