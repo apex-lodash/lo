@@ -10,6 +10,10 @@ TODO: Add installation guide
 ##Pluck
 Used to pluck a list of fields out of a list of objects
 
+###Single object
+Account account = ...;
+Object lo.pluck(account, 'name');
+
 ###Single depth
 ```java
 List<Account> accountList = ...;
