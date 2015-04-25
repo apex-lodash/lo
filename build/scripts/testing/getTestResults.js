@@ -54,7 +54,7 @@ var buildClassIdToClassDataMap = function () {
 			console.log('Got information about ' + lo.size(data) + ' classes');
 
 			lo.forEach(data, function (row) {
-				if (!row.Body.contains('@isTest')) {
+				if (row.Body.indexOf('@isTest') === -1) {
 					id_to_class_map[row.Id] = {
 						name: path_template(row),
 						source: row.Body,
@@ -134,14 +134,12 @@ var postToCoveralls = function () {
 		deferred = Q.defer(),
 		coveralls_data = {
 			repo_token: process.env.COVERALLS_REPO_TOKEN,
-			service_name: 'coveralls-sfdc',
+			service_name: 'travis-ci',
+			service_job_id: process.env.TRAVIS_JOB_ID,
 			source_files: lo.values(id_to_class_map)
 		};
 
 	console.log('Posting data to coveralls');
-
-	console.log(process.env.COVERALLS_JOB_ID);
-	console.log(process.env.COVERALLS_SERVICE_NAME);
 
 	fs.writeFile('/tmp/coveralls_data.json', JSON.stringify(coveralls_data), function (fs_error) {
 		if (fs_error) {
