@@ -79,4 +79,24 @@ public with sharing class lo {
 
 		return result;
 	}
+
+	/**
+	* A utility method for turning a list of Objects into a list of Strings
+	*
+	* @param collection The collection of objects to iterate over
+	* @return A type casted list of strings
+	*/
+	public static List<String> toString(List<Object> collection) {
+		if (collection == null) {
+			return null;
+		}
+
+		List<String> result = new List<String>();
+
+		for (Object obj : collection) {
+			result.add((String)(obj));
+		}
+
+		return result;
+	}
 }
