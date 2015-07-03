@@ -99,4 +99,61 @@ public with sharing class lo {
 
 		return result;
 	}
+
+	/**
+	* A method to drop a given number of elements off the "left hand side" of an array
+	*
+	* @param collection A list of objects to drop from
+	* @param n The number of items to drop
+	* @return The reduced collection
+	*/
+	public static List<Object> drop(List<Object> collection, Integer n) {
+		if (collection == null || n >= collection.size()) {
+			return new List<Object>();
+		}
+
+		for (Integer i = 0; i < n; i++) {
+			collection.remove(0);
+		}
+
+		return collection;
+	}
+
+	/**
+	* A method to drop a single element off the "left hand side" of an array
+	*
+	* @param collection A list of objects to drop from
+	* @return The reduced collection
+	*/
+	public static List<Object> drop(List<Object> collection) {
+		return drop(collection, 1);
+	}
+
+	/**
+	* A method to drop a given number of elements off the "right hand side" of an array
+	*
+	* @param collection A list of objects to drop from
+	* @param n The number of items to drop
+	* @return The reduced collection
+	*/
+	public static List<Object> dropRight(List<Object> collection, Integer n) {
+		if (collection == null || n >= collection.size()) {
+			return new List<Object>();
+		}
+
+		for (Integer i = 0; i < n; i++) {
+			collection.remove(collection.size() - 1);
+		}
+
+		return collection;
+	}
+
+	/** A method to drop a single element off the "right had side" of an array
+	*
+	* @param collection A list of objects to drop from
+	* @return The reduced collection
+	*/
+	public static List<Object> dropRight(List<Object> collection) {
+		return dropRight(collection, 1);
+	}
 }
