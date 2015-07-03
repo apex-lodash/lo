@@ -101,7 +101,7 @@ public with sharing class lo {
 	}
 
 	/**
-	* A method to drop a given number of elements off the "left hand side" of an array
+	* A method to drop a given number of elements off the "left hand side" of an list
 	*
 	* @param collection A list of objects to drop from
 	* @param n The number of items to drop
@@ -120,7 +120,7 @@ public with sharing class lo {
 	}
 
 	/**
-	* A method to drop a single element off the "left hand side" of an array
+	* A method to drop a single element off the "left hand side" of an list
 	*
 	* @param collection A list of objects to drop from
 	* @return The reduced collection
@@ -130,7 +130,7 @@ public with sharing class lo {
 	}
 
 	/**
-	* A method to drop a given number of elements off the "right hand side" of an array
+	* A method to drop a given number of elements off the "right hand side" of an list
 	*
 	* @param collection A list of objects to drop from
 	* @param n The number of items to drop
@@ -148,12 +148,30 @@ public with sharing class lo {
 		return collection;
 	}
 
-	/** A method to drop a single element off the "right had side" of an array
+	/**
+	* A method to drop a single element off the "right had side" of an list
 	*
 	* @param collection A list of objects to drop from
 	* @return The reduced collection
 	*/
 	public static List<Object> dropRight(List<Object> collection) {
 		return dropRight(collection, 1);
+	}
+
+	/**
+	* A method to generate a filled list of objects
+	*
+	* @param source The source object
+	* @param n The number of times to fill that object
+	* @return The populated list
+	*/
+	public static List<Object> fill(Object source, Integer n) {
+		List<Object> result = new List<Object>();
+
+		for (Integer i = 0; i < n; i++) {
+			result.add(source);
+		}
+
+		return result;
 	}
 }
