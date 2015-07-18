@@ -220,4 +220,21 @@ public with sharing class lo {
 
 		return source.get(source.size() - 1);
 	}
+
+	/**
+	* Gets all of the list except for the first element
+	*
+	* @param source The source list
+	* @return All of the list except the first element
+	*/
+	public static List<Object> rest(List<Object> source) {
+		if (source == null || source.isEmpty()) {
+			return new List<Object>();
+		}
+
+		List<Object> sourceCopy = source.clone();
+		sourceCopy.remove(0);
+
+		return sourceCopy;
+	}
 }
