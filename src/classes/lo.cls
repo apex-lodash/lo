@@ -206,4 +206,18 @@ public with sharing class lo {
 
 		return result;
 	}
+
+	/**
+	* A method to get the last element of the list
+	*
+	* @param source The source list
+	* @return The last element in the list
+	*/
+	public static Object last(List<Object> source) {
+		if (source == null || source.isEmpty()) {
+			return null;
+		}
+
+		return source.get(source.size() - 1);
+	}
 }
