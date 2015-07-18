@@ -178,12 +178,12 @@ public with sharing class lo {
 	/**
 	* A method to take a single list of objects and chunk it into a list of list of objects
 	*
-	* @param source The source list
+	* @param collection The collection list
 	* @param n The number of items per chunk
 	* @return The chunked list
 	*/
-	public static List<List<Object>> chunk(List<Object> source, Integer n) {
-		List<Object> sourceCopy = source.clone();
+	public static List<List<Object>> chunk(List<Object> collection, Integer n) {
+		List<Object> collectionCopy = collection.clone();
 		List<List<Object>> result = new List<List<Object>>();
 
 		if (n <= 0) {
@@ -191,8 +191,8 @@ public with sharing class lo {
 		}
 
 		List<Object> parts = new List<Object>();
-		for (Integer i = 1; i < source.size() + 1; i++) {
-			parts.add(sourceCopy.remove(0));
+		for (Integer i = 1; i < collection.size() + 1; i++) {
+			parts.add(collectionCopy.remove(0));
 
 			if (Math.mod(i, n) == 0) {
 				result.add(parts.clone());
@@ -210,55 +210,55 @@ public with sharing class lo {
 	/**
 	* A method to get the last element of the list
 	*
-	* @param source The source list
+	* @param collection The collection list
 	* @return The last element in the list
 	*/
-	public static Object last(List<Object> source) {
-		if (source == null || source.isEmpty()) {
+	public static Object last(List<Object> collection) {
+		if (collection == null || collection.isEmpty()) {
 			return null;
 		}
 
-		return source.get(source.size() - 1);
+		return collection.get(collection.size() - 1);
 	}
 
 	/**
 	* Gets all of the list except for the first element
 	*
-	* @param source The source list
+	* @param collection The collection list
 	* @return All of the list except the first element
 	*/
-	public static List<Object> rest(List<Object> source) {
-		if (source == null || source.isEmpty()) {
+	public static List<Object> rest(List<Object> collection) {
+		if (collection == null || collection.isEmpty()) {
 			return new List<Object>();
 		}
 
-		List<Object> sourceCopy = source.clone();
-		sourceCopy.remove(0);
+		List<Object> collectionCopy = collection.clone();
+		collectionCopy.remove(0);
 
-		return sourceCopy;
+		return collectionCopy;
 	}
 
 	/**
 	* Slices out parts of an list from the given start to the given end
 	*
-	* @param source The source list
+	* @param collection The collection list
 	* @param start The starting index
 	* @param stop The ending index
 	* @return The new list
 	*/
-	public static List<Object> slice(List<Object> source, Integer start, Integer stop) {
-		if (source == null || source.isEmpty() || start > stop) {
+	public static List<Object> slice(List<Object> collection, Integer start, Integer stop) {
+		if (collection == null || collection.isEmpty() || start > stop) {
 			return new List<Object>();
 		}
 
-		List<Object> sourceCopy = source.clone();
+		List<Object> collectionCopy = collection.clone();
 		List<Object> result = new List<Object>();
 
 		start = (start < 0) ? 0 : start;
-		stop = (stop > sourceCopy.size()) ? sourceCopy.size() : stop;
+		stop = (stop > collectionCopy.size()) ? collectionCopy.size() : stop;
 
 		for (Integer i = start; i < stop; i++) {
-			result.add(sourceCopy.remove(start));
+			result.add(collectionCopy.remove(start));
 		}
 
 		return result;
@@ -267,15 +267,15 @@ public with sharing class lo {
 	/**
 	* Slices from the given index to the end of the list
 	*
-	* @param source The source list
+	* @param collection The collection list
 	* @param start The starting index
 	* @return The new list
 	*/
-	public static List<Object> slice(List<Object> source, Integer start) {
-		if (source == null || source.isEmpty()) {
+	public static List<Object> slice(List<Object> collection, Integer start) {
+		if (collection == null || collection.isEmpty()) {
 			return new List<Object>();
 		}
 
-		return slice(source, start, source.size());
+		return slice(collection, start, collection.size());
 	}
 }
