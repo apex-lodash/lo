@@ -174,4 +174,36 @@ public with sharing class lo {
 
 		return result;
 	}
+
+	/**
+	* A method to take a single list of objects and chunk it into a list of list of objects
+	*
+	* @param source The source list
+	* @param n The number of items per chunk
+	* @return The chunked list
+	*/
+	public static List<List<Object>> chunk(List<Object> source, Integer n) {
+		List<Object> sourceCopy = source.clone();
+		List<List<Object>> result = new List<List<Object>>();
+
+		if (n <= 0) {
+			return result;
+		}
+
+		List<Object> parts = new List<Object>();
+		for (Integer i = 1; i < source.size() + 1; i++) {
+			parts.add(sourceCopy.remove(0));
+
+			if (Math.mod(i, n) == 0) {
+				result.add(parts.clone());
+				parts.clear();
+			}
+		}
+
+		if (!parts.isEmpty()) {
+			result.add(parts);
+		}
+
+		return result;
+	}
 }
