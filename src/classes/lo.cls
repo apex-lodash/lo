@@ -237,4 +237,45 @@ public with sharing class lo {
 
 		return sourceCopy;
 	}
+
+	/**
+	* Slices out parts of an list from the given start to the given end
+	*
+	* @param source The source list
+	* @param start The starting index
+	* @param stop The ending index
+	* @return The new list
+	*/
+	public static List<Object> slice(List<Object> source, Integer start, Integer stop) {
+		if (source == null || source.isEmpty() || start > stop) {
+			return new List<Object>();
+		}
+
+		List<Object> sourceCopy = source.clone();
+		List<Object> result = new List<Object>();
+
+		start = (start < 0) ? 0 : start;
+		stop = (stop > sourceCopy.size()) ? sourceCopy.size() : stop;
+
+		for (Integer i = start; i < stop; i++) {
+			result.add(sourceCopy.remove(start));
+		}
+
+		return result;
+	}
+
+	/**
+	* Slices from the given index to the end of the list
+	*
+	* @param source The source list
+	* @param start The starting index
+	* @return The new list
+	*/
+	public static List<Object> slice(List<Object> source, Integer start) {
+		if (source == null || source.isEmpty()) {
+			return new List<Object>();
+		}
+
+		return slice(source, start, source.size());
+	}
 }
