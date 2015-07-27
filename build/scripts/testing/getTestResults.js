@@ -140,6 +140,7 @@ var postToCoveralls = function () {
 		};
 
 	console.log('Posting data to coveralls');
+	console.log(JSON.stringify(coveralls_data.source_files));
 
 	fs.writeFile('/tmp/coveralls_data.json', JSON.stringify(coveralls_data), function (fs_error) {
 		if (fs_error) {
