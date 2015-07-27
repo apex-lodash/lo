@@ -278,4 +278,34 @@ public with sharing class lo {
 
 		return slice(collection, start, collection.size());
 	}
+
+	/**
+	* Takes a list of lists and makes them into a single list
+	*
+	* @param collection The list of lists
+	* @return The new list
+	*/
+	public static List<Object> union(List<List<Object>> collection) {
+		List<Object> result = new List<Object>();
+
+		if (collection == null || collection.isEmpty()) {
+			return result;
+		}
+
+		List<List<Object>> clonedCollection = collection.clone();
+
+		for (List<Object> subCollection : clonedCollection) {
+			if (subCollection == null || subCollection.isEmpty()) {
+				continue;
+			}
+
+			Integer subCollectionSize = subCollection.size();
+
+			for (Integer i = 0; i < subCollectionSize; i++) {
+				result.add(subCollection.remove(0));
+			} 
+		}
+
+		return result;
+	}
 }

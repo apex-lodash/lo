@@ -102,7 +102,7 @@ lo.rest(myList);
 ##Slice
 Gets part of a list
 
-##From given point to end
+###From given point to end
 
 ```java
 List<String> myList = new List<String>{ 'a', 'b', 'c', 'd', 'e' };
@@ -110,7 +110,7 @@ lo.slice(myList, 2);
 // ['c', 'd', 'e']
 ```
 
-##From given point to given point
+###From given point to given point
 
 ```java
 List<String> myList = new List<String>{ 'a', 'b', 'c', 'd', 'e' };
@@ -124,4 +124,18 @@ Takes a list of Objects and typecasts them to strings
 ```java
 List<Account> accountList = ...;
 List<String> lo.toString(lo.pluck(accountList, 'name'));
+```
+
+#Union
+Combines a list of lists of objects and combines them into a single list
+
+```java
+List<List<String>> myList = new List<List<String>>{
+	List<String>{'a', 'b'},
+	List<String>{'c', 'd'},
+	List<String>(),
+	List<String>{'e'}
+};
+lo.union(myList);
+// ['a', 'b', 'c', 'd', 'e']
 ```
