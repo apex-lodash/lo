@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # If anything fails in the build exit and don't continue on
-set -ev
+set -e
 
 TESTING_ROOT="$TRAVIS_BUILD_DIR/build/scripts/testing"
 

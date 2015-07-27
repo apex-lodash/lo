@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/apex-lodash/lo.svg?branch=master)](https://travis-ci.org/apex-lodash/lo)
+[![Coverage Status](http://coveralls.io/repos/apex-lodash/lo/badge.svg?branch=master&service=github)](http://coveralls.io/github/apex-lodash/lo?branch=master)
 
 #apex-lodash
 This class provides some similar utility methods to that of [lodash](https://lodash.com/).
