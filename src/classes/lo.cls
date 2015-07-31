@@ -303,9 +303,35 @@ public with sharing class lo {
 
 			for (Integer i = 0; i < subCollectionSize; i++) {
 				result.add(subCollection.remove(0));
-			} 
+			}
 		}
 
 		return result;
+	}
+
+	/**
+	* Generates a list of parts from the "left hand side" of the list
+	*
+	* @param collection The list of objects
+	* @param n The number of parts to return
+	* @return The new list
+	*/
+	public static List<Object> take(List<Object> collection, Integer n) {
+		return slice(collection, 0, n);
+	}
+
+	/**
+	* Generates a list of parts from the "right hand side" of the list
+	*
+	* @param collection The list of objects
+	* @param n The number of parts to return
+	* @return The new list
+	*/
+	public static List<Object> takeRight(List<Object> collection, Integer n) {
+		if (collection == null) {
+			return new List<Object>();
+		}
+
+		return slice(collection, collection.size() - n, collection.size());
 	}
 }

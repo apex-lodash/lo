@@ -114,8 +114,26 @@ lo.slice(myList, 2);
 
 ```java
 List<String> myList = new List<String>{ 'a', 'b', 'c', 'd', 'e' };
-lo.slice(myList, 2,4);
+lo.slice(myList, 2, 4);
 // ['c', 'd']
+```
+
+##Take
+Takes a given number of entries off the "left hand side" of a list
+
+```java
+List<String> myList = new List<String>{ 'a', 'b', 'c', 'd', 'e' };
+lo.take(myList, 2);
+// ['a', 'b']
+```
+
+##TakeRight
+Takes a given number of entries off the "right hand side" of a list
+
+```java
+List<String> myList = new List<String>{ 'a', 'b', 'c', 'd', 'e' };
+lo.takeRight(myList, 2);
+// ['d', 'e']
 ```
 
 ##ToString
