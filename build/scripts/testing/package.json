@@ -9,7 +9,7 @@
 	"dependencies": {
 		"jsforce": "*",
 		"q": "*",
-		"lodash": "*",
+		"lodash": "jsforce/jsforce",
 		"restler": "*"
 	}
 }

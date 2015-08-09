@@ -13,6 +13,9 @@ var sfdc_client = new jsforce.Connection({loginUrl : process.env.SFDC_URL});
 /** A map of class Ids to class information */
 var id_to_class_map = {};
 
+/** A map of test class Ids to class information */
+var test_class_map = {};
+
 /**
 * Log into the salsforce instance
 */
@@ -60,12 +63,84 @@ var buildClassIdToClassDataMap = function () {
 						source: row.Body,
 						coverage: []
 					};
+				} else {
+					test_class_map[row.Id] = {
+						name: path_template(row),
+						source: row.Body
+					};
 				}
 			});
 
 			deferred.resolve();
 		}
 	});
+
+	return deferred.promise;
+};
+
+/**
+* Runs all tests with the tooling api
+*/
+var runAllTests = function () {
+	'use strict';
+
+	var class_ids = lo.keys(test_class_map),
+		deferred = Q.defer();
+
+	sfdc_client.tooling.runTestsAsynchronous(class_ids, function (error, data) {
+		if (error) {
+			deferred.reject(new Error(error));
+		} else {
+			deferred.resolve(data);
+		}
+	});
+
+	return deferred.promise;
+};
+
+/**
+* Query the test results
+*
+* @param testRunId The id of the test run
+* @param deferred The Q.defer instance
+*/
+var queryTestResults = function myself(testRunId, deferred) {
+	'use strict';
+
+	var isComplete = true;
+
+	console.log('Waiting for tests');
+
+	sfdc_client.query('select Id, Status, ApexClassId from ApexTestQueueItem where ParentJobId = \'' + testRunId + '\'', function (error, data) {
+		if (error) {
+			deferred.reject(new Error(error));
+		} else {
+			lo.each(data.records, function (row) {
+				if (row.Status === 'Queued' || row.Status === 'Processing') {
+					isComplete = false;
+				}
+			});
+
+			if (isComplete) {
+				deferred.resolve();
+			} else {
+				myself(testRunId, deferred);
+			}
+		}
+	});
+};
+
+/**
+* Waits until all tests are completed
+*
+* @param testRunId The id of the test run
+*/
+var waitUntilTestsComplete = function (testRunId) {
+	'use strict';
+
+	var deferred = Q.defer();
+
+	queryTestResults(testRunId, deferred);
 
 	return deferred.promise;
 };
@@ -155,7 +230,6 @@ var postToCoveralls = function () {
 			};
 
 			restler.post('https://coveralls.io/api/v1/jobs', post_options).on("complete", function (data) {
-				console.log(data);
 				deferred.resolve();
 			});
 		}
@@ -166,9 +240,11 @@ var postToCoveralls = function () {
 
 Q.fcall(sfdcLogin)
 	.then(buildClassIdToClassDataMap)
+	.then(runAllTests)
+	.then(waitUntilTestsComplete)
 	.then(buildCoverallsCoverage)
 	.then(postToCoveralls)
-	.fail(function (error) {
+	.catch(function (error) {
 		'use strict';
 		console.log(error);
 	})

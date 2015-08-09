@@ -14,7 +14,7 @@ solenopsis.env.MASTER=local
 solenopsis.env.DEPENDENT=lodash
 solenopsis.env.local.HOME=$SRC_DIR
 
-sf.antFile=$TRAVIS_BUILD_DIR/build/ant/ant-salesforce-33.jar
+sf.antFile=$TRAVIS_BUILD_DIR/build/ant/ant-salesforce-34.jar
 #sf.ignoreFile=$SRC_DIR/.sfdcignore
 EOF
 
@@ -25,4 +25,5 @@ username = $SFDC_USERNAME
 password = $SFDC_PASSWORD
 token = $SFDC_TOKEN
 url = $SFDC_URL
+sf.version = 34.0
 EOF
