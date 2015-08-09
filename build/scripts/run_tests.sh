@@ -6,5 +6,6 @@ set -e
 TESTING_ROOT="$TRAVIS_BUILD_DIR/build/scripts/testing"
 
 cd $TESTING_ROOT
-npm install
+npm cache clean
+npm install --save
 node getTestResults.js
