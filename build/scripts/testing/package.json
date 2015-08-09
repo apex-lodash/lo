@@ -7,9 +7,9 @@
 	},
 	"description": "scripts used for building apex-lodash and testing apex-lodash",
 	"dependencies": {
-		"jsforce": "*",
+		"jsforce": "jsforce/jsforce",
 		"q": "*",
-		"lodash": "jsforce/jsforce",
+		"lodash": "*",
 		"restler": "*"
 	}
 }
