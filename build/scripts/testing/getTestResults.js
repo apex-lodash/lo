@@ -177,16 +177,16 @@ var buildCoverallsCoverage = function () {
 					}
 
 					lo.forEach(row.Coverage.coveredLines, function (line_number) {
-						if (id_to_class_map[class_id].coverage[line_number] === null) {
-							id_to_class_map[class_id].coverage[line_number] = 1;
+						if (id_to_class_map[class_id].coverage[line_number - 1] === null) {
+							id_to_class_map[class_id].coverage[line_number - 1] = 1;
 						} else {
-							id_to_class_map[class_id].coverage[line_number] += 1;
+							id_to_class_map[class_id].coverage[line_number - 1] += 1;
 						}
 					});
 
 					lo.forEach(row.Coverage.uncoveredLines, function (line_number) {
-						if (id_to_class_map[class_id].coverage[line_number] === null) {
-							id_to_class_map[class_id].coverage[line_number] = 0;
+						if (id_to_class_map[class_id].coverage[line_number - 1] === null) {
+							id_to_class_map[class_id].coverage[line_number - 1] = 0;
 						}
 					});
 				}
