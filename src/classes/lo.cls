@@ -334,4 +334,20 @@ public with sharing class lo {
 
 		return slice(collection, collection.size() - n, collection.size());
 	}
+
+	/**
+	* Gets all but the last element of a list
+	*
+	* @param collection The list of objects
+	* @return The new list
+	*/
+	public static List<Object> initial(List<Object> collection) {
+		if (collection == null || collection.size() - 1 <= 0) {
+			return new List<Object>();
+		}
+
+		collection.remove(collection.size() - 1);
+
+		return collection;
+	}
 }

@@ -61,6 +61,14 @@ lo.fill('foo', 3);
 // ['foo', 'foo', 'foo']
 ```
 
+##Initial
+Gets all but the last element of a list
+```java
+List<String> myList = new List<String>{ 'a', 'b', 'c'};
+lo.initial(myList);
+// ['a','b']
+```
+
 ##Last
 Gets the last item from a list
 ```java
